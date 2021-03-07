@@ -1,0 +1,2 @@
+class Techno < ApplicationRecord
+end
