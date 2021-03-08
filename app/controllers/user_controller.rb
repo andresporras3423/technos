@@ -7,9 +7,8 @@ class UserController < ApplicationController
         user = User.create(username: params[:username], email: params[:email], password: params[:password],
                            password_confirmation: params[:password_confirmation])
         if user.valid?
-          user.record_signup
           user.save
-          render json: user.as_json(only: %i[id email name remember_token]), status: :created
+          render json: user.as_json(only: %i[id email username]), status: :created
         else
           render json: user.errors.messages, status: :conflict
         end
