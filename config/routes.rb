@@ -5,4 +5,5 @@ Rails.application.routes.draw do
   post '/session/create', to: 'session#create'
   delete '/session/destroy', to: 'session#destroy'
   post '/techno/create', to: 'techno#create'
+  put '/techno/update', to: 'techno#update'
 end
