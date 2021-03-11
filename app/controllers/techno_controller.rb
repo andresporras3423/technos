@@ -3,7 +3,7 @@ class TechnoController < ApplicationController
     before_action :restrict_access, only: %i[create]
 
     def create
-        techno = Techno.create(techno_name: params[:techno_name], techno_status: params[:techno_status], user_id: params[:user_id])
+        techno = Techno.create(techno_name: params[:techno_name], techno_status: params[:techno_status], user_id: cookies[:id])
         if techno.valid?
           techno.save
           render json: techno.as_json(only: %i[id techno_name]), status: :created

@@ -8,4 +8,9 @@ class SessionController < ApplicationController
           head(:unauthorized)
         end
       end
+
+      def destroy
+        cookies.delete :id
+        render json: {'status': 'session successfully closed'}, status: :accepted
+      end
 end

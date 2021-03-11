@@ -3,5 +3,6 @@ Rails.application.routes.draw do
   root 'user#index'
   post '/user/create', to: 'user#create'
   post '/session/create', to: 'session#create'
+  delete '/session/destroy', to: 'session#destroy'
   post '/techno/create', to: 'techno#create'
 end
