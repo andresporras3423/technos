@@ -23,5 +23,15 @@ class TechnoController < ApplicationController
       else
         render json: techno.as_json, status: :accepted
       end
-  end
+    end
+
+    def get
+      user_technos=[]
+      if params[:sort_by_name]
+        user_technos=Techno.where("user_id=#{cookies[:id]} and techno_status=true").order('techno_name')
+      else
+        user_technos=Techno.where("user_id=#{cookies[:id]} and techno_status=true").order('created_at')
+      end
+      render json: user_technos.as_json, status: :accepted
+    end
 end
