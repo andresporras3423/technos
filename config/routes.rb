@@ -7,4 +7,5 @@ Rails.application.routes.draw do
   post '/techno/create', to: 'techno#create'
   put '/techno/update', to: 'techno#update'
   get '/techno/get', to: 'techno#get'
+  get '/techno/search', to: 'techno#search'
 end

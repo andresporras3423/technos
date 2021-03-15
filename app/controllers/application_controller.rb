@@ -1,6 +1,11 @@
 class ApplicationController < ActionController::API
     include ActionController::Cookies
     @user = nil
+    @@status = Hash.new
+    @@status[nil]='NULL';
+    @@status[true]='true';
+    @@status[false]='false';
+
 
   def restrict_access
     begin
