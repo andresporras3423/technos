@@ -9,4 +9,6 @@ Rails.application.routes.draw do
   get '/techno/get', to: 'techno#get'
   get '/techno/search', to: 'techno#search'
   get '/pokemon/get', to: 'pokemon#get'
+  get '/pokemon/get_names', to: 'pokemon#get_names'
+  get '/pokemon/get_details', to: 'pokemon#get_details'
 end
