@@ -25,8 +25,8 @@ class PokemonController < ApplicationController
         file.close
         ruby_output = Hash.new
         ruby_obj = JSON.parse(file_data)
-        ruby_obj.each do |key, value| 
-          if key=params[:id].to_s
+        ruby_obj.each do |key, value|
+          if key==params[:id].to_s
             ruby_output=value 
             break
           end
