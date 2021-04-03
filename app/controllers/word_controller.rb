@@ -3,61 +3,54 @@ class WordController < ApplicationController
     before_action :restrict_access, only: %i[create, update, get, search, delete]
 
     def create
-        techno = Techno.create(techno_name: params[:techno_name], techno_status: params[:techno_status], user_id: cookies[:id])
-        if techno.valid?
-          techno.save
-          render json: techno.as_json(only: %i[id techno_name]), status: :created
+        word = Word.create(techno_id: params[:techno_id], word: params[:word], translation: params[:translation], user_id: cookies[:id])
+        if word.valid?
+            word.save
+          render json: word.as_json(only: %i[id word]), status: :created
         else
-          render json: techno.errors.messages, status: :conflict
+          render json: word.errors.messages, status: :conflict
         end
     end
 
     def update
       begin
-        techno = Techno.find(params[:id])
-        techno.techno_name = params[:techno_name]
-        techno.techno_status = params[:techno_status]
-        techno.save
+        word = Word.find(params[:id])
+        word.word = params[:word]
+        word.translation = params[:translation]
+        word.techno_id = params[:techno_id]
+        word.save
       rescue => exception
         render json: {'error': exception}, status: :bad_request
       else
-        render json: techno.as_json, status: :accepted
+        render json: word.as_json, status: :accepted
       end
-    end
-
-    def get
-      user_technos=[]
-      if params[:sort_by_name]
-        user_technos=Techno.where("user_id=#{cookies[:id]} and techno_status=true").order('techno_name')
-      else
-        user_technos=Techno.where("user_id=#{cookies[:id]} and techno_status=true").order('created_at')
-      end
-      render json: user_technos.as_json, status: :accepted
     end
 
     def search
-      user_technos=[]
-      if params[:sort_by_name]==true
-        user_technos=Techno.where("user_id=#{cookies[:id]}
-          and ('#{params[:techno_name]}'=='' or '#{params[:techno_name]}'==techno_name)
-          and (#{@@status[params[:techno_status]]} is NULL or #{@@status[params[:techno_status]]}==techno_status)
-          ").order('techno_name')
+      user_words=[]
+      if params[:sort_by_word]==true
+        user_words=Word.where("user_id=#{cookies[:id]}
+          and ('#{params[:word]}'=='' or '#{params[:word]}'==word)
+          and ('#{params[:translation]}'=='' or '#{params[:translation]}'==translation)
+          and ('#{params[:techno_id]}'==-1 or '#{params[:techno_id]}'==techno_id)
+          ").order('word')
       else
-        user_technos=Techno.where("user_id=#{cookies[:id]}
-          and ('#{params[:techno_name]}'=='' or '#{params[:techno_name]}'==techno_name)
-          and (#{@@status[params[:techno_status]]} is NULL or #{@@status[params[:techno_status]]}==techno_status)
-          ").order('created_at')
+        user_words=Word.where("user_id=#{cookies[:id]}
+            and ('#{params[:word]}'=='' or '#{params[:word]}'==word)
+            and ('#{params[:translation]}'=='' or '#{params[:translation]}'==translation)
+            and ('#{params[:techno_id]}'==-1 or '#{params[:techno_id]}'==techno_id)
+            ").order('created_at')
       end
-      render json: user_technos.as_json, status: :accepted
+      render json: user_words.as_json, status: :accepted
     end
 
     def delete
-      techno_to_delete = Techno.find(params[:id])
-      if techno_to_delete
-        techno_to_delete.destroy
+      word_to_delete = Word.find(params[:id])
+      if word_to_delete
+        word_to_delete.destroy
         render json: {"deleted_id":params[:id]}, status: :accepted
       else
-        render json: {"error": "techno with id #{params[:id]} doesn't exists"}, status: :not_found
+        render json: {"error": "word with id #{params[:id]} doesn't exists"}, status: :not_found
       end
     end
 end
