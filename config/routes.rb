@@ -8,6 +8,7 @@ Rails.application.routes.draw do
   put '/techno/update', to: 'techno#update'
   get '/techno/get', to: 'techno#get'
   get '/techno/search', to: 'techno#search'
+  delete '/techno/delete', to: 'techno#delete'
   get '/pokemon/get', to: 'pokemon#get'
   get '/pokemon/get_names_types', to: 'pokemon#get_names_types'
   get '/pokemon/get_details', to: 'pokemon#get_details'
