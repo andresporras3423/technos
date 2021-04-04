@@ -12,4 +12,9 @@ Rails.application.routes.draw do
   get '/pokemon/get', to: 'pokemon#get'
   get '/pokemon/get_names_types', to: 'pokemon#get_names_types'
   get '/pokemon/get_details', to: 'pokemon#get_details'
+  post '/word/create', to: 'word#create'
+  put '/word/update', to: 'word#update'
+  get '/word/get', to: 'word#get'
+  get '/word/search', to: 'word#search'
+  delete '/word/delete', to: 'word#delete'
 end

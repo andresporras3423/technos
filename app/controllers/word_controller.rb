@@ -27,19 +27,32 @@ class WordController < ApplicationController
     end
 
     def search
+      filter = params[:sort_by_word] ? 'word' : 'created_at'
       user_words=[]
-      if params[:sort_by_word]==true
+      if params[:search]==1
         user_words=Word.where("user_id=#{cookies[:id]}
-          and ('#{params[:word]}'=='' or '#{params[:word]}'==word)
-          and ('#{params[:translation]}'=='' or '#{params[:translation]}'==translation)
-          and ('#{params[:techno_id]}'==-1 or '#{params[:techno_id]}'==techno_id)
-          ").order('word')
-      else
+          and ('#{params[:word]}'='' or word LIKE '%#{params[:word]}%')
+          and ('#{params[:translation]}'='' or translation LIKE '%#{params[:translation]}%')
+          and (#{params[:techno_id]}=-1 or techno_id=#{params[:techno_id]})
+          ").order(filter)
+      elsif params[:search]==2
         user_words=Word.where("user_id=#{cookies[:id]}
-            and ('#{params[:word]}'=='' or '#{params[:word]}'==word)
-            and ('#{params[:translation]}'=='' or '#{params[:translation]}'==translation)
-            and ('#{params[:techno_id]}'==-1 or '#{params[:techno_id]}'==techno_id)
-            ").order('created_at')
+            and ('#{params[:word]}'='' or word LIKE '#{params[:word]}%')
+            and ('#{params[:translation]}'='' or translation LIKE '#{params[:translation]}%')
+            and (#{params[:techno_id]}=-1 or techno_id=#{params[:techno_id]})
+        ").order(filter)
+      elsif params[:search]==3
+        user_words=Word.where("user_id=#{cookies[:id]}
+            and ('#{params[:word]}'='' or word LIKE '%#{params[:word]}')
+            and ('#{params[:translation]}'='' or translation LIKE '%#{params[:translation]}')
+            and (#{params[:techno_id]}=-1 or techno_id=#{params[:techno_id]})
+        ").order(filter)
+      elsif  params[:search]==4
+        user_words=Word.where("user_id=#{cookies[:id]}
+            and ('#{params[:word]}'='' or word = '#{params[:word]}')
+          and ('#{params[:translation]}'='' or translation = '#{params[:translation]}')
+          and (#{params[:techno_id]}=-1 or techno_id=#{params[:techno_id]})
+            ").order(filter)
       end
       render json: user_words.as_json, status: :accepted
     end
