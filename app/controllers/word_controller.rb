@@ -66,4 +66,11 @@ class WordController < ApplicationController
         render json: {"error": "word with id #{params[:id]} doesn't exists"}, status: :not_found
       end
     end
+
+    def next_word
+        words = []
+        words = Word.where("user_id=#{cookies[:id]}
+            and (#{params[:techno_id]}=-1 or techno_id=#{params[:techno_id]})").order("random()").limit(4)
+        render json: words.as_json(only: %i[id word translation]), status: :accepted
+    end
 end
