@@ -26,27 +26,35 @@ class TechnoController < ApplicationController
     end
 
     def get
+      filter = params[:sort_by_name] ? 'techno_name' : 'created_at'
       user_technos=[]
-      if params[:sort_by_name]
-        user_technos=Techno.where("user_id=#{cookies[:id]} and techno_status=true").order('techno_name')
-      else
-        user_technos=Techno.where("user_id=#{cookies[:id]} and techno_status=true").order('created_at')
-      end
+      user_technos=Techno.where("user_id=#{cookies[:id]} and techno_status=true").order(filter)
       render json: user_technos.as_json, status: :accepted
     end
 
     def search
+      filter = params[:sort_by_name] ? 'techno_name' : 'created_at'
       user_technos=[]
-      if params[:sort_by_name]==true
+      if params[:search]==1
         user_technos=Techno.where("user_id=#{cookies[:id]}
-          and ('#{params[:techno_name]}'=='' or '#{params[:techno_name]}'==techno_name)
+          and ('#{params[:techno_name]}'='' or techno_name LIKE '%#{params[:techno_name]}%')
           and (#{@@status[params[:techno_status]]} is NULL or #{@@status[params[:techno_status]]}==techno_status)
-          ").order('techno_name')
-      else
+          ").order(filter)
+      elsif params[:search]==2
         user_technos=Techno.where("user_id=#{cookies[:id]}
-          and ('#{params[:techno_name]}'=='' or '#{params[:techno_name]}'==techno_name)
+            and ('#{params[:techno_name]}'='' or techno_name LIKE '#{params[:techno_name]}%')
+            and (#{@@status[params[:techno_status]]} is NULL or #{@@status[params[:techno_status]]}==techno_status)
+        ").order(filter)
+      elsif params[:search]==3
+        user_technos=Techno.where("user_id=#{cookies[:id]}
+            and ('#{params[:techno_name]}'='' or techno_name LIKE '%#{params[:techno_name]}')
+            and (#{@@status[params[:techno_status]]} is NULL or #{@@status[params[:techno_status]]}==techno_status)
+        ").order(filter)
+      elsif  params[:search]==4
+        user_technos=Techno.where("user_id=#{cookies[:id]}
+            and ('#{params[:techno_name]}'='' or techno_name = '#{params[:techno_name]}')
           and (#{@@status[params[:techno_status]]} is NULL or #{@@status[params[:techno_status]]}==techno_status)
-          ").order('created_at')
+            ").order(filter)
       end
       render json: user_technos.as_json, status: :accepted
     end
@@ -55,7 +63,7 @@ class TechnoController < ApplicationController
       techno_to_delete = Techno.find(params[:id])
       if techno_to_delete
         techno_to_delete.destroy
-        render json: {"deleted_id":params[:id]}, status: :accepted
+        render json: {"deleted_id": params[:id]}, status: :accepted
       else
         render json: {"error": "techno with id #{params[:id]} doesn't exists"}, status: :not_found
       end
