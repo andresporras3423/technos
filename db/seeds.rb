@@ -6,13 +6,13 @@
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
 
-# query used: select concat("User.create(username:'", mail, "', email:'", mail, "', password:'", pass, "', password_confirm:'", pass, "');") as query from users
+# query used: select concat("User.create(username:'", mail, "', email:'", mail, "', password:'", pass, "', password_confirmation:'", pass, "');") as query from users
 
-User.create(username:'oscarporras02@gmail.com', email:'oscarporras02@gmail.com', password:'asdf1234', password_confirm:'asdf1234');
-User.create(username:'oscarrussi@outlook.com', email:'oscarrussi@outlook.com', password:'asdf', password_confirm:'asdf');
-User.create(username:'jenny', email:'jenny', password:'asdf1234', password_confirm:'asdf1234');
-User.create(username:'smart', email:'smart', password:'asdf1234', password_confirm:'asdf1234');
-User.create(username:'suguruni2@gmail.com', email:'suguruni2@gmail.com', password:'asdf1234', password_confirm:'asdf1234');
+User.create(username:'oscarporras02@gmail.com', email:'oscarporras02@gmail.com', password:'asdf1234', password_confirmation:'asdf1234');
+User.create(username:'oscarrussi@outlook.com', email:'oscarrussi@outlook.com', password:'asdf', password_confirmation:'asdf');
+User.create(username:'jenny', email:'jenny', password:'asdf1234', password_confirmation:'asdf1234');
+User.create(username:'smart', email:'smart', password:'asdf1234', password_confirmation:'asdf1234');
+User.create(username:'suguruni2@gmail.com', email:'suguruni2@gmail.com', password:'asdf1234', password_confirmation:'asdf1234');
 
 # query used: select concat("Techno.create(techno_name:'", t.technology, "', techno_status:", case when t.active=1 then "true" else "false" end, ", user_id: User.find_by_email('", mail ,"').id);") as query from users as u inner join technos as t on u.user_id = t.user_id;
 
@@ -64,3 +64,7 @@ Techno.create(techno_name:'level11', techno_status:true, user_id: User.find_by_e
 Techno.create(techno_name:'level12', techno_status:true, user_id: User.find_by_email('smart').id);
 Techno.create(techno_name:'translation', techno_status:true, user_id: User.find_by_email('suguruni2@gmail.com').id);
 Techno.create(techno_name:'pronunciation', techno_status:true, user_id: User.find_by_email('suguruni2@gmail.com').id);
+
+# query for words in SQLite:  select concat('INSERT INTO "words" ("word", "translation", "created_at", "updated_at", "user_id", "techno_id") VALUES ("',w.word,'", "',w.translation,'", date("now"), date("now"), (select id from users where email="',u.mail,'" limit 1), (select t0.id from technos as t0 inner join users as u0 on t0.user_id=u0.id where t0.techno_name="',t.technology,'" and u0.email="',u.mail,'" limit 1));') as query from words as w inner join technos as t on w.techno_id=t.techno_id inner join users as u on t.user_id=u.user_id;
+
+# query for words in postgreSQL: select concat('INSERT INTO "words" ("word", "translation", "created_at", "updated_at", "user_id", "techno_id") VALUES ("',w.word,'", "',w.translation,'", NOW(), NOW(), (select id from users where email="',u.mail,'" limit 1), (select t0.id from technos as t0 inner join users as u0 on t0.user_id=u0.id where t0.techno_name="',t.technology,'" and u0.email="',u.mail,'" limit 1));') as query from words as w inner join technos as t on w.techno_id=t.techno_id inner join users as u on t.user_id=u.user_id;
