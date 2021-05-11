@@ -1,6 +1,6 @@
 class WordController < ApplicationController
     include ActionController::Cookies
-    before_action :restrict_access, only: %i[create, update, get, search, delete]
+    before_action :restrict_access, only: %i[create, update, search, delete, next_question]
 
     def create
         word = Word.create(techno_id: params[:techno_id], word: params[:word], translation: params[:translation], user_id: cookies[:id])
@@ -67,7 +67,7 @@ class WordController < ApplicationController
       end
     end
 
-    def next_word
+    def next_question
         words = []
         words = Word.where("user_id=#{cookies[:id]}
             and (#{params[:techno_id]}=-1 or techno_id=#{params[:techno_id]})").order("random()").limit(4)

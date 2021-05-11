@@ -16,7 +16,7 @@ Rails.application.routes.draw do
   put '/word/update', to: 'word#update'
   get '/word/get', to: 'word#get'
   get '/word/search', to: 'word#search'
-  get '/word/next_word', to: 'word#next_word'
+  get '/word/next_question', to: 'word#next_question'
   delete '/word/delete', to: 'word#delete'
   get '/test/get', to: 'test#get'
   post '/test/create', to: 'test#create'
