@@ -1,6 +1,6 @@
 class TestController < ApplicationController
     include ActionController::Cookies
-    before_action :restrict_access, only: %i[create, get]
+    before_action :restrict_access, only: %i[create get]
 
     def create
         begin

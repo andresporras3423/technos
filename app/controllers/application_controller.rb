@@ -19,12 +19,11 @@ class ApplicationController < ActionController::API
       end
     end
 
-
   def restrict_access
-    begin
-      @user = User.find(cookies[:id])
-    rescue => exception
+    unless cookies[:id]
       render json: { "error": 'you must be logged to do this action' }, status: :unauthorized
+      return
     end
+    @user = User.find(cookies[:id])
   end
 end

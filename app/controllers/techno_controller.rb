@@ -1,6 +1,6 @@
 class TechnoController < ApplicationController
     include ActionController::Cookies
-    before_action :restrict_access, only: %i[create, update, get, search, delete]
+    before_action :restrict_access, only: %i[create update get search delete]
 
     def create
         techno = Techno.create(techno_name: params[:techno_name], techno_status: params[:techno_status], user_id: cookies[:id])

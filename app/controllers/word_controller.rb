@@ -1,6 +1,6 @@
 class WordController < ApplicationController
     include ActionController::Cookies
-    before_action :restrict_access, only: %i[create, update, search, delete, next_question]
+    before_action :restrict_access, only: %i[create update search delete next_question]
 
     def create
         word = Word.create(techno_id: params[:techno_id], word: params[:word], translation: params[:translation], user_id: cookies[:id])
