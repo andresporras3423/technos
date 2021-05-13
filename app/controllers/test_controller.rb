@@ -1,10 +1,9 @@
 class TestController < ApplicationController
-    include ActionController::Cookies
     before_action :restrict_access, only: %i[create get]
 
     def create
         begin
-          test = Test.create(correct: params[:correct], total: params[:total], user_id: cookies[:id])
+          test = Test.create(correct: params[:correct], total: params[:total], user_id: @user.id)
           if test.valid?
             test.save
             render json: test.as_json(only: %i[id]), status: :created
@@ -19,7 +18,7 @@ class TestController < ApplicationController
     def get
       begin
       user_tests=[]
-      user_tests=Test.where("user_id=#{cookies[:id]}").order("created_at desc")
+      user_tests=Test.where("user_id=#{@user.id}").order("created_at desc")
       rescue => exception
         render json: {'error': exception}, status: :bad_request
       else

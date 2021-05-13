@@ -1,9 +1,8 @@
 class WordController < ApplicationController
-    include ActionController::Cookies
     before_action :restrict_access, only: %i[create update search delete next_question]
 
     def create
-        word = Word.create(techno_id: params[:techno_id], word: params[:word], translation: params[:translation], user_id: cookies[:id])
+        word = Word.create(techno_id: params[:techno_id], word: params[:word], translation: params[:translation], user_id: @user.id)
         if word.valid?
             word.save
           render json: word.as_json(only: %i[id word]), status: :created
@@ -30,29 +29,29 @@ class WordController < ApplicationController
       filter = params[:sort_by_word] ? 'word' : 'created_at'
       user_words=[]
       if params[:search]==1
-        user_words=Word.where("user_id=#{cookies[:id]}
+        user_words=Word.where("user_id=#{@user.id}
           and ('#{params[:word]}'='' or word LIKE '%#{params[:word]}%')
           and ('#{params[:translation]}'='' or translation LIKE '%#{params[:translation]}%')
           and (#{params[:techno_id]}=-1 or techno_id=#{params[:techno_id]})
           ").order(filter)
       elsif params[:search]==2
-        user_words=Word.where("user_id=#{cookies[:id]}
+        user_words=Word.where("user_id=#{@user.id}
             and ('#{params[:word]}'='' or word LIKE '#{params[:word]}%')
             and ('#{params[:translation]}'='' or translation LIKE '#{params[:translation]}%')
             and (#{params[:techno_id]}=-1 or techno_id=#{params[:techno_id]})
         ").order(filter)
       elsif params[:search]==3
-        user_words=Word.where("user_id=#{cookies[:id]}
+        user_words=Word.where("user_id=#{@user.id}
             and ('#{params[:word]}'='' or word LIKE '%#{params[:word]}')
             and ('#{params[:translation]}'='' or translation LIKE '%#{params[:translation]}')
             and (#{params[:techno_id]}=-1 or techno_id=#{params[:techno_id]})
         ").order(filter)
       elsif  params[:search]==4
-        user_words=Word.where("user_id=#{cookies[:id]}
-            and ('#{params[:word]}'='' or word = '#{params[:word]}')
+        user_words=Word.where("user_id=#{@user.id}
+          and ('#{params[:word]}'='' or word = '#{params[:word]}')
           and ('#{params[:translation]}'='' or translation = '#{params[:translation]}')
           and (#{params[:techno_id]}=-1 or techno_id=#{params[:techno_id]})
-            ").order(filter)
+          ").order(filter)
       end
       render json: user_words.as_json, status: :accepted
     end
@@ -69,7 +68,7 @@ class WordController < ApplicationController
 
     def next_question
         words = []
-        words = Word.where("user_id=#{cookies[:id]}
+        words = Word.where("user_id=#{@user.id}
             and (#{params[:techno_id]}=-1 or techno_id=#{params[:techno_id]})").order("random()").limit(4)
         render json: words.as_json(only: %i[id word translation]), status: :accepted
     end

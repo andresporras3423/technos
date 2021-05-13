@@ -1,5 +1,4 @@
 class ApplicationController < ActionController::API
-    include ActionController::Cookies
     @user = nil
     @@status = Hash.new
     @@status[nil]='NULL';
@@ -18,12 +17,12 @@ class ApplicationController < ActionController::API
         file.close
       end
     end
-
-  def restrict_access
-    unless cookies[:id]
-      render json: { "error": 'you must be logged to do this action' }, status: :unauthorized
-      return
+  
+    def restrict_access
+      @user = User.find(request.headers["id"].to_i)
+      unless @user&.authenticated?(request.headers["remember_token"])
+        @user = nil
+        render json: { "error": 'you must be logged to do this action' }, status: :unauthorized
+      end
     end
-    @user = User.find(cookies[:id])
-  end
 end

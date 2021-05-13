@@ -1,7 +1,6 @@
 class UserController < ApplicationController
-  include ActionController::Cookies
     def index
-        render json: {"cookie": cookies[:id]}, status: :ok
+        render json: {"cookie": @user.id}, status: :ok
       end
 
       def create
