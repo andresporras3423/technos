@@ -28,6 +28,7 @@ module Technos
       allow do
         origins '*'
         resource '*', headers: :any, methods: [:get, :post, :patch, :put]
+        credentials: true
       end
     end
 
