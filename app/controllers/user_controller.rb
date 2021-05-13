@@ -1,4 +1,5 @@
 class UserController < ApplicationController
+  include ActionController::Cookies
     def index
         render json: {"cookie": cookies[:id]}, status: :ok
       end
