@@ -2,7 +2,6 @@ class SessionController < ApplicationController
 
   def create
     user = User.find_by_email(params[:email])
-    byebug
     if user&.authenticate(params[:password])
       user.record_signup
       user.save
