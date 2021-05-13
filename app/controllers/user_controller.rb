@@ -1,6 +1,6 @@
 class UserController < ApplicationController
     def index
-        render json: {"test": "successful","this": "is a JSON"}, status: :ok
+        render json: {"cookie": cookies[:id]}, status: :ok
       end
 
       def create

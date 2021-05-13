@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
-  root 'user#index'
+  get 'user/index', to: 'user#index'
   post '/user/create', to: 'user#create'
   post '/session/create', to: 'session#create'
   delete '/session/destroy', to: 'session#destroy'
