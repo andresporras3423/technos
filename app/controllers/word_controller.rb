@@ -26,7 +26,7 @@ class WordController < ApplicationController
     end
 
     def search
-      filter = @@status[params[:sort_by_word]] ? 'word' : 'created_at'
+      filter = params[:sort_by_word] ? 'word' : 'created_at'
       user_words=[]
       if params[:search]==1
         user_words=Word.where("user_id=#{@user.id}
