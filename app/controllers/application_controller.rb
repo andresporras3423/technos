@@ -19,10 +19,14 @@ class ApplicationController < ActionController::API
     end
   
     def restrict_access
-      @user = User.find(request.headers["id"].to_i)
-      unless @user&.authenticated?(request.headers["remember_token"])
-        @user = nil
-        render json: { "error": 'you must be logged to do this action' }, status: :unauthorized
-      end
+        begin
+          @user = User.find(request.headers["id"].to_i)
+          unless @user&.authenticated?(request.headers["remember_token"])
+            @user = nil
+            render json: { "error": 'you must be logged to do this action' }, status: :unauthorized
+          end
+        rescue => exception
+          render json: { "error": 'wrong data provided' }, status: :unauthorized
+        end
     end
 end
