@@ -1,4 +1,5 @@
 class SessionController < ApplicationController
+  before_action :restrict_access, only: %i[destroy]
 
   def create
     user = User.find_by_email(params[:email])
@@ -13,6 +14,6 @@ class SessionController < ApplicationController
 
   def destroy
     @user.update(remember_token: nil)
-    render json: @user.errors.messages, status: :accepted
+    render json: {'status' : 201}, status: :accepted
   end
 end
