@@ -21,7 +21,7 @@ class ApplicationController < ActionController::API
     def restrict_access
         begin
           @user = User.find(request.headers["id"].to_i)
-          unless @user&.authenticated?(request.headers["remember_token"])
+          unless @user&.authenticated?(request.headers["token"])
             @user = nil
             render json: { "error": 'you must be logged to do this action' }, status: :unauthorized
           end

@@ -1,6 +1,5 @@
 class User < ApplicationRecord
     has_secure_password
-    validates :password, presence: true
     validates :email, presence: true, uniqueness: true
     validates :username, presence: true
     has_many :technos, dependent: :destroy
@@ -13,6 +12,7 @@ class User < ApplicationRecord
       end
     
       def authenticated?(remember_token)
+        return false if remember_token==nil
         self.remember_token == remember_token
       end
     
