@@ -14,6 +14,6 @@ class SessionController < ApplicationController
 
   def destroy
     @user.update(remember_token: nil)
-    render json: {'status' : 201}, status: :accepted
+    render json: {"status": 201}, status: :accepted
   end
 end
