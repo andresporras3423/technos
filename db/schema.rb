@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_05_13_205338) do
+ActiveRecord::Schema.define(version: 2021_05_17_222911) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -21,6 +21,7 @@ ActiveRecord::Schema.define(version: 2021_05_13_205338) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.integer "user_id"
+    t.index ["user_id", "techno_name"], name: "index_technos_on_user_id_and_techno_name", unique: true
   end
 
   create_table "tests", force: :cascade do |t|
@@ -47,6 +48,7 @@ ActiveRecord::Schema.define(version: 2021_05_13_205338) do
     t.datetime "updated_at", precision: 6, null: false
     t.integer "user_id"
     t.integer "techno_id"
+    t.index ["user_id", "word", "techno_id"], name: "index_words_on_user_id_and_word_and_techno_id", unique: true
   end
 
   add_foreign_key "technos", "users"
