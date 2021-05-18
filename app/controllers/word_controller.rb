@@ -19,7 +19,7 @@ class WordController < ApplicationController
         word.techno_id = params[:techno_id]
         word.save
       rescue => exception
-        render json: {'error': exception}, status: :bad_request
+        render json: word.errors.messages, status: :conflict
       else
         render json: word.as_json, status: :accepted
       end
