@@ -2,7 +2,7 @@ class WordController < ApplicationController
     before_action :restrict_access, only: %i[create update search delete next_question]
 
     def create
-        word = Word.create(techno_id: params[:techno_id], word: params[:word], translation: params[:translation], user_id: @user.id)
+        word = Word.new(techno_id: params[:techno_id], word: params[:word], translation: params[:translation], user_id: @user.id)
         if word.valid?
             word.save
           render json: word.as_json(only: %i[id word]), status: :created
