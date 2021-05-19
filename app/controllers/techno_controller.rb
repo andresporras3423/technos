@@ -18,7 +18,7 @@ class TechnoController < ApplicationController
         techno.techno_status = params[:techno_status]
         techno.save
       rescue => exception
-        render json: {'error': exception}, status: :bad_request
+        render json: word.errors.messages, status: :conflict
       else
         render json: techno.as_json, status: :accepted
       end
