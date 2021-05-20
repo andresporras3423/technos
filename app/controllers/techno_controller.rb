@@ -37,22 +37,22 @@ class TechnoController < ApplicationController
       if params[:search]==1
         user_technos=Techno.where("user_id=#{@user.id}
           and ('#{params[:techno_name]}'='' or techno_name LIKE '%#{params[:techno_name]}%')
-          and (#{@@status[params[:techno_status]]} is NULL or #{@@status[params[:techno_status]]}==techno_status)
+          and (#{@@status[params[:techno_status]]} is NULL or techno_status is #{@@status[params[:techno_status]]})
           ").order(filter)
       elsif params[:search]==2
         user_technos=Techno.where("user_id=#{@user.id}
             and ('#{params[:techno_name]}'='' or techno_name LIKE '#{params[:techno_name]}%')
-            and (#{@@status[params[:techno_status]]} is NULL or #{@@status[params[:techno_status]]}==techno_status)
+            and (#{@@status[params[:techno_status]]} is NULL or techno_status is #{@@status[params[:techno_status]]})
         ").order(filter)
       elsif params[:search]==3
         user_technos=Techno.where("user_id=#{@user.id}
             and ('#{params[:techno_name]}'='' or techno_name LIKE '%#{params[:techno_name]}')
-            and (#{@@status[params[:techno_status]]} is NULL or #{@@status[params[:techno_status]]}==techno_status)
+            and (#{@@status[params[:techno_status]]} is NULL or techno_status is #{@@status[params[:techno_status]]})
         ").order(filter)
       elsif  params[:search]==4
         user_technos=Techno.where("user_id=#{@user.id}
             and ('#{params[:techno_name]}'='' or techno_name = '#{params[:techno_name]}')
-          and (#{@@status[params[:techno_status]]} is NULL or #{@@status[params[:techno_status]]}==techno_status)
+          and (#{@@status[params[:techno_status]]} is NULL or techno_status is #{@@status[params[:techno_status]]})
             ").order(filter)
       end
       render json: user_technos.as_json, status: :accepted
