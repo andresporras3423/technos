@@ -29,28 +29,32 @@ class WordController < ApplicationController
       filter = params[:sort_by_word] ? 'word' : 'created_at'
       user_words=[]
       if params[:search]==1 # contains
-        user_words=Word.where("user_id=#{@user.id}
-          and ('#{params[:word]}'='' or word LIKE '%#{params[:word]}%')
-          and ('#{params[:translation]}'='' or translation LIKE '%#{params[:translation]}%')
-          and (#{params[:techno_id]}=-1 or techno_id=#{params[:techno_id]})
+        user_words=Word.joins(:technos).where("technos.techno_status is true
+          and words.user_id=#{@user.id}
+          and ('#{params[:word]}'='' or words.word LIKE '%#{params[:word]}%')
+          and ('#{params[:translation]}'='' or words.translation LIKE '%#{params[:translation]}%')
+          and (#{params[:techno_id]}=-1 or words.techno_id=#{params[:techno_id]})
           ").order(filter)
       elsif params[:search]==2 # starts
-        user_words=Word.where("user_id=#{@user.id}
-            and ('#{params[:word]}'='' or word LIKE '#{params[:word]}%')
-            and ('#{params[:translation]}'='' or translation LIKE '#{params[:translation]}%')
-            and (#{params[:techno_id]}=-1 or techno_id=#{params[:techno_id]})
+        user_words=Word.joins(:technos).where("technos.techno_status is true
+            and words.user_id=#{@user.id}
+            and ('#{params[:word]}'='' or words.word LIKE '#{params[:word]}%')
+            and ('#{params[:translation]}'='' or words.translation LIKE '#{params[:translation]}%')
+            and (#{params[:techno_id]}=-1 or words.techno_id=#{params[:techno_id]})
         ").order(filter)
       elsif params[:search]==3 # ends
-        user_words=Word.where("user_id=#{@user.id}
-            and ('#{params[:word]}'='' or word LIKE '%#{params[:word]}')
-            and ('#{params[:translation]}'='' or translation LIKE '%#{params[:translation]}')
-            and (#{params[:techno_id]}=-1 or techno_id=#{params[:techno_id]})
+        user_words=Word.joins(:technos).where("technos.techno_status is true
+            and words.user_id=#{@user.id}
+            and ('#{params[:word]}'='' or words.word LIKE '%#{params[:word]}')
+            and ('#{params[:translation]}'='' or words.translation LIKE '%#{params[:translation]}')
+            and (#{params[:techno_id]}=-1 or words.techno_id=#{params[:techno_id]})
         ").order(filter)
       elsif  params[:search]==4 # equals
-        user_words=Word.where("user_id=#{@user.id}
-          and ('#{params[:word]}'='' or word = '#{params[:word]}')
-          and ('#{params[:translation]}'='' or translation = '#{params[:translation]}')
-          and (#{params[:techno_id]}=-1 or techno_id=#{params[:techno_id]})
+        user_words=Word.joins(:technos).where("technos.techno_status is true
+          and words.user_id=#{@user.id}
+          and ('#{params[:word]}'='' or words.word = '#{params[:word]}')
+          and ('#{params[:translation]}'='' or words.translation = '#{params[:translation]}')
+          and (#{params[:techno_id]}=-1 or words.techno_id=#{params[:techno_id]})
           ").order(filter)
       end
       render json: user_words.as_json, status: :accepted
