@@ -5,7 +5,7 @@ class Techno < ApplicationRecord
     validate :uniq_user_techno
 
     def uniq_user_techno
-        if Word.where("user_id=#{self.user_id} and techno_name=#{self.techno_name} and id!= #{self.id.nil? ? -1 : self.id}").limit(1).length==1
+        if Techno.where("user_id=#{self.user_id} and techno_name=#{self.techno_name} and id!= #{self.id.nil? ? -1 : self.id}").limit(1).length==1
             self.errors.add(:techno_name, "the combination of user_id and techno_name must be unique")
         end 
     end
