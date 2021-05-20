@@ -72,8 +72,15 @@ class WordController < ApplicationController
 
     def next_question
         words = []
-        words = Word.where("user_id=#{@user.id}
-            and (#{params[:techno_id]}=-1 or techno_id=#{params[:techno_id]})").order("random()").limit(4)
-        render json: words.as_json(only: %i[id word translation]), status: :accepted
+        techno_id = params[:techno_id]
+        techno_id = Techno.where("user_id=#{@user.id}").order("random()").limit(1).first.id if params[:techno_id]==-1
+        sql = """
+            select g.word, g.translation, t.techno_name from 
+            (select id, word, translation, techno_id, ROW_NUMBER() OVER(partition by translation order by random()) as num 
+            from words where user_id=#{@user.id} and techno_id=#{techno_id}) as g inner join technos as t on g.techno_id=t.id 
+            where g.num=1 order by random() limit 4;
+        """;
+        options = ActiveRecord::Base.connection.execute(sql)
+        render json: options, status: :accepted
     end
 end
