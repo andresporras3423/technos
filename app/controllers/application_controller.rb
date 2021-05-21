@@ -5,10 +5,10 @@ class ApplicationController < ActionController::API
     @@status[true]='true';
     @@status[false]='false';
     #uncomment below to add the words again
-    #if using postgres then replace words.txt with words_p.txt
+    #if using postgres then replace words.txt with words_p2.txt
     def initialize
       if Word.all.length==0
-        pokemon_file_path = File.join(File.dirname(__FILE__), "../texts/words_p.txt") 
+        pokemon_file_path = File.join(File.dirname(__FILE__), "../texts/words_p2.txt") 
         file = File.open(pokemon_file_path)
         file_data = file.read
         file_data.each_line do |line|
