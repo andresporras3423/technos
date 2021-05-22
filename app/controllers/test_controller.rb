@@ -3,7 +3,7 @@ class TestController < ApplicationController
 
     def create
         begin
-          test = Test.create(correct: params[:correct], total: params[:total], user_id: @user.id)
+          test = Test.new(correct: params[:correct], total: params[:total], user_id: @user.id)
           if test.valid?
             test.save
             render json: test.as_json(only: %i[id]), status: :created
