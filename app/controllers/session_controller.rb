@@ -8,7 +8,7 @@ class SessionController < ApplicationController
       user.save
       render json: user.as_json(only: %i[id email name remember_token]), status: :created
     else
-      head(:unauthorized)
+      render json: {"error": 401}, status: :unauthorized
     end
   end
 
