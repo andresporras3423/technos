@@ -1,5 +1,5 @@
 class WordController < ApplicationController
-    before_action :restrict_access, only: %i[create update search delete next_question]
+    before_action :restrict_access, only: %i[create update search delete next_question next_practice]
 
     def create
         word = Word.new(techno_id: params[:techno_id], word: params[:word], translation: params[:translation], user_id: @user.id)
@@ -70,10 +70,10 @@ class WordController < ApplicationController
       end
     end
 
-    def next_question
+  def next_question
         words = []
         techno_id = params[:techno_id]
-        techno_id = Techno.where("user_id=#{@user.id}").order("random()").limit(1).first.id if params[:techno_id]==-1
+        techno_id = Techno.where("user_id=#{@user.id} and techno_status is true").order("random()").limit(1).first.id if params[:techno_id]==-1
         sql = """
             select g.word, g.translation, t.techno_name from 
             (select id, word, translation, techno_id, ROW_NUMBER() OVER(partition by translation order by random()) as num 
@@ -82,5 +82,18 @@ class WordController < ApplicationController
         """;
         options = ActiveRecord::Base.connection.execute(sql)
         render json: options, status: :accepted
-    end
+  end
+
+  def next_practice
+    words = []
+    techno_id = params[:techno_id]
+    techno_id = Techno.where("user_id=#{@user.id} and techno_status is true").order("random()").limit(1).first.id if params[:techno_id]==-1
+    sql = """
+        select w.word, w.translation, t.techno_name 
+        from words as w inner join technos as t on w.techno_id=t.id 
+        order by random() limit 1;
+    """;
+    practice = ActiveRecord::Base.connection.execute(sql)
+    render json: practice, status: :accepted
+  end
 end
