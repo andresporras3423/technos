@@ -91,6 +91,7 @@ class WordController < ApplicationController
     sql = """
         select w.word, w.translation, t.techno_name 
         from words as w inner join technos as t on w.techno_id=t.id 
+        where w.techno_id=#{techno_id}
         order by random() limit 1;
     """;
     practice = ActiveRecord::Base.connection.execute(sql)
